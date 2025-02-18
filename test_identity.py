@@ -24,9 +24,9 @@ def test_makeIdentity(data):
 
 passed = 0
 
-data  = np.load("/home/junseo/sejun/rel_pose_optimizer/datset/result_action5.npy")
-data2 = np.load("/home/junseo/sejun/rel_pose_optimizer/datset/result_12promax.npy")
-data3 = np.load("/home/junseo/sejun/rel_pose_optimizer/datset/result_15navy.npy")
+data  = np.load("path/to/rel_pose_optimizer/datset/result_action5.npy")
+data2 = np.load("path/to/rel_pose_optimizer/datset/result_12promax.npy")
+data3 = np.load("path/to/rel_pose_optimizer/datset/result_15navy.npy")
 
 new_data = np.stack([data, data2, data3], axis=1)
 

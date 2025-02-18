@@ -20,9 +20,4 @@ for da, dp, dn in zip(data, data2, data3):
 new_data = np.stack([data, data2, data3], axis=1)
 
 print("Transformed shape:", new_data.shape)
-# np.save("/home/junseo/sejun/rel_pose_optimizer/datset/combined.npy",new_data)
-print(new_data[0])    # ex) 0frame 0camera 0 obj
-
-print("------------------------------------------------")
-newT = rearrange(new_data[0], "c o row col -> o c row col")
-print(newT)    # ex) 0frame 0camera 0 obj
+np.save("/home/junseo/sejun/rel_pose_optimizer/datset/combined.npy",new_data)

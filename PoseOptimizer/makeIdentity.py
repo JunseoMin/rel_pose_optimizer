@@ -1,5 +1,5 @@
 import numpy as np
-from util import *
+from ..util import *
 
 def makeIdentity(transformations: np.ndarray):
     r"""

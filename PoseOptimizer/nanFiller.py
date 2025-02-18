@@ -1,8 +1,8 @@
 from typing import Tuple
 import numpy as np
 from einops import rearrange
-from util.math import *
-from util.error import *
+from ..util.math import *
+from ..util.error import *
 
 def nanFiller(obj_transformations: np.ndarray, cam_transformations: dict):
     r"""

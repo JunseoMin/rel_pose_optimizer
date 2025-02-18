@@ -1,7 +1,7 @@
 import numpy as np
 from einops import rearrange
-from util import *
-from util.error import LogicalError
+from ..util import *
+from ..util.error import LogicalError
 
 def CamRelPoseFromMarker(transformation:np.ndarray):
     r"""

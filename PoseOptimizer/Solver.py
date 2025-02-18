@@ -1,6 +1,6 @@
 import numpy as np
 from einops import rearrange
-from util.math import averageSE3
+from ..util.math import averageSE3
 
 class poseSolver():
     def __init__(self, type = "meansolver"):

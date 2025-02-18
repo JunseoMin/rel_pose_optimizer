@@ -1,9 +1,9 @@
-from PoseOptimizer.Solver import poseSolver
-from PoseOptimizer.CamRelPoseFromMarker import CamRelPoseFromMarker
-from PoseOptimizer.nanFiller import nanFiller
-from PoseOptimizer.makeIdentity import makeIdentity
+from .Solver import poseSolver
+from .CamRelPoseFromMarker import CamRelPoseFromMarker
+from .nanFiller import nanFiller
+from .makeIdentity import makeIdentity
 
-from util import *
+from ..util import *
 
 class RelPoseOptimzer():
     
