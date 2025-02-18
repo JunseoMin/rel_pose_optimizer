@@ -1,6 +1,9 @@
-from PoseOptimizer.Solver import Solver
+from PoseOptimizer.Solver import poseSolver
+from PoseOptimizer.CamRelPoseFromMarker import CamRelPoseFromMarker
+from PoseOptimizer.nanFiller import nanFiller
+from PoseOptimizer.makeIdentity import makeIdentity
+
 from util import *
-from . import *
 
 class RelPoseOptimzer():
     
@@ -13,46 +16,39 @@ class RelPoseOptimzer():
     ### Output:
         Optimized transformations (n_objects, SE(3) matrix (4,4))
     """
-    def __init__(self,):
+    def __init__(self, solver_type = "meansolver"):
         self.raw_transformations        = None
         self.camera_transformations     = None
         self.transformations_optimized  = None
+        self.solver                     = poseSolver(type=solver_type)
 
-        self.solver                     = Solver("mean_solver")
-
-    def set_input(self, transformations):
+    def setInput(self, transformations):
         r"""
         @param transformations: np.ndarray type with (number of cameras, number of objects, SE(3))
         """
         self.raw_transformations    = transformations
 
     def optimize(self):
-        assert not (self.raw_transformations == None), "[Error] Should set input first."
+        assert self.raw_transformations is not None, "[Error] Should set input first."
         
         # 0. get camera rel pose from overlapping marker
         self.camera_transformations = CamRelPoseFromMarker(self.raw_transformations)
         assert not (self.camera_transformations == None), "[Error] Camera relative transformation not given."
 
         # 1. filling na by camera transformations
-        self.raw_transformations = nanFiller(self.raw_transformations)
+        self.raw_transformations = nanFiller(self.raw_transformations, self.camera_transformations)
 
         # 2. make last identity (reference frame)
         # obj_transformations contains each camera's perspective of transformation view
         self.transformations_optimized =  makeIdentity(self.raw_transformations)
-        
         # 3. optimize transformations by solver
-        self._solve(self.transformations_optimized)
+        self.transformations_optimized = self.solver.solve(self.transformations_optimized)
+        # print(self.transformations_optimized)
 
-    def get_rel_pose(self):
-        assert not (self.transformations_optimized == None), "[Error] Should call solver first"
+
+    def getRelPose(self):
+        assert self.transformations_optimized is not None, "[Error] Should call solver first"
         return self.transformations_optimized
-
-    
-    def _solve(self):
-        assert not (self.raw_transformations == None), "[Error] Should set input first."
-        self.solver.solve()
-
-        pass
 
     def clear(self):
         self.raw_transformations        = None
