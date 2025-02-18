@@ -3,11 +3,6 @@ from einops import rearrange
 from util import inverseSE3
 from PoseOptimizer import *
 
-data  = np.load("/home/junseo/sejun/rel_pose_optimizer/datset/result_action5.npy")
-data2 = np.load("/home/junseo/sejun/rel_pose_optimizer/datset/result_12promax.npy")
-data3 = np.load("/home/junseo/sejun/rel_pose_optimizer/datset/result_15navy.npy")
-
-new_data = np.stack([data, data2, data3], axis=1)
 
 
 def test_CamRelPoseFromMarker(data):
@@ -30,6 +25,13 @@ def test_CamRelPoseFromMarker(data):
 
 passed = 0
 
-for data in new_data[120:]:
+data  = np.load("/home/junseo/sejun/rel_pose_optimizer/datset/result_action5.npy")
+data2 = np.load("/home/junseo/sejun/rel_pose_optimizer/datset/result_12promax.npy")
+data3 = np.load("/home/junseo/sejun/rel_pose_optimizer/datset/result_15navy.npy")
+
+new_data = np.stack([data, data2, data3], axis=1)
+
+
+for data in new_data[:20]:
     passed += test_CamRelPoseFromMarker(data)
     print(f"passed {passed} / {len(new_data[120:])}")
