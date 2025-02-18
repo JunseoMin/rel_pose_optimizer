@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.linalg import logm, expm
 
 def inverseSE3(T: np.ndarray):
     assert T.shape == (4,4), "input shape miss match!! check inverse function"
@@ -34,3 +35,26 @@ def is_SE3(matrix):
         return False, "Last row is not [0, 0, 0, 1]"
 
     return True, "Matrix is a valid SE(3) transformation"
+
+def averageSE3(matrices):
+    r"""
+    Compute the average of SE(3) transformation matrices using Lie algebra.
+
+    :param matrices: List or array of SE(3) matrices (shape: [N, 4, 4])
+    :return: Averaged SE(3) transformation matrix (shape: [4, 4])
+    """
+
+    N = len(matrices)
+
+    translations = np.array([mat[:3, 3] for mat in matrices])
+    mean_translation = np.mean(translations, axis=0)
+
+    log_rotations = [logm(mat[:3, :3]) for mat in matrices]
+    mean_log_rotation = np.mean(log_rotations, axis=0)
+    mean_rotation = expm(mean_log_rotation)
+
+    avg_SE3 = np.eye(4)
+    avg_SE3[:3, :3] = mean_rotation
+    avg_SE3[:3, 3] = mean_translation
+
+    return avg_SE3
