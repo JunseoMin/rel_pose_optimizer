@@ -12,8 +12,8 @@ def test_CamRelPoseFromMarker(data):
 
     rel_poses = CamRelPoseFromMarker(transformation)
 
-    print("Output length:", len(rel_poses))  # NaN 포함된 객체 제외한 개수
-    print("Example output:", rel_poses)  # 첫 번째 객체의 변환 정보 출력
+    # print("Output length:", len(rel_poses))  
+    # print("Example output:", rel_poses)  
 
     assert isinstance(rel_poses, dict), "Each element should be a dictionary"
     # assert all("T01" in obj and "T02" in obj and "T12" in obj for obj in rel_poses), "Keys should be 'T12', 'T13', 'T23'"
@@ -32,6 +32,10 @@ data3 = np.load("/home/junseo/sejun/rel_pose_optimizer/datset/result_15navy.npy"
 new_data = np.stack([data, data2, data3], axis=1)
 
 
-for data in new_data[:20]:
-    passed += test_CamRelPoseFromMarker(data)
-    print(f"passed {passed} / {len(new_data[120:])}")
+for data in new_data:
+    try:
+        passed += test_CamRelPoseFromMarker(data)
+    except Exception as e:
+        pass
+
+    print(f"passed {passed} / {len(new_data)}")

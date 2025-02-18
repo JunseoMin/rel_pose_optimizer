@@ -6,14 +6,12 @@ def test_nanFiller(data):
 
     cam_transformations = CamRelPoseFromMarker(data)
 
+    # print("Before filling NaNs:", data)
     filled_transformations = nanFiller(data, cam_transformations)
 
-    print("Before filling NaNs:", data)
-    print("After filling NaNs:", filled_transformations)
+    # print("After filling NaNs:", filled_transformations)
 
     assert not np.any(np.isnan(filled_transformations)), "There should be no NaN values after processing!"
-
-    print("Test passed! NaN values filled successfully.")
 
     return 1
 
@@ -25,7 +23,14 @@ data3 = np.load("/home/junseo/sejun/rel_pose_optimizer/datset/result_15navy.npy"
 
 new_data = np.stack([data, data2, data3], axis=1)
 
+error_frames = []
 
-for data in new_data[200:]:
-    passed += test_nanFiller(data)
-    print(f"passed {passed} / {len(new_data[200:])}")
+for i,data in enumerate(new_data):
+    try:
+        passed += test_nanFiller(data)
+    except Exception as e:
+        error_frames.append(i)
+        pass
+
+print(f"passed {passed} / {len(new_data)}")
+print(error_frames)
