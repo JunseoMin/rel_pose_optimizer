@@ -1,12 +1,11 @@
 from PoseOptimizer.Solver import Solver
 from util import *
-from PoseOptimizer.nanFiller import *
-from PoseOptimizer.CamRelPoseFromMarker import *
+from . import *
 
 class RelPoseOptimzer():
     
     r"""
-    @brief ### Find optimized reletive pose from 'one' frame
+    Find optimized reletive pose from **'one'** frame
 
     ### Input:
         Raw transformation between objects list (n_camera, n_objects, SE(3) matrix (4,4))
@@ -19,7 +18,7 @@ class RelPoseOptimzer():
         self.camera_transformations     = None
         self.transformations_optimized  = None
 
-        self.solver                     = Solver()
+        self.solver                     = Solver("mean_solver")
 
     def set_input(self, transformations):
         r"""
@@ -38,10 +37,11 @@ class RelPoseOptimzer():
         self.raw_transformations = nanFiller(self.raw_transformations)
 
         # 2. make last identity (reference frame)
-        self.raw_transformations = make_identity(self.raw_transformations)
-
+        # obj_transformations contains each camera's perspective of transformation view
+        self.transformations_optimized =  makeIdentity(self.raw_transformations)
+        
         # 3. optimize transformations by solver
-        self._solve()
+        self._solve(self.transformations_optimized)
 
     def get_rel_pose(self):
         assert not (self.transformations_optimized == None), "[Error] Should call solver first"
@@ -53,4 +53,9 @@ class RelPoseOptimzer():
         self.solver.solve()
 
         pass
+
+    def clear(self):
+        self.raw_transformations        = None
+        self.camera_transformations     = None
+        self.transformations_optimized  = None        
     
