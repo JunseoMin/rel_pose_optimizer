@@ -1,13 +1,14 @@
 import numpy as np
 from einops import rearrange
 from util import *
+from util.error import LogicalError
 
 def CamRelPoseFromMarker(transformation:np.ndarray):
     r"""
     @brief Calc camera relative transformation from overlapping AR marker
     @param transformations: np.ndarray type with (number of cameras, number of objects, SE(3))
 
-    ### returns
+    return
         {"T12": Tc1c2,"T13": T_c1c3,"T23": Tc2c3 ...}
     """
 
@@ -35,4 +36,6 @@ def CamRelPoseFromMarker(transformation:np.ndarray):
                 
         camera_rels = object_rels
 
+    assert len(camera_rels) > 0, "[ERROR] Can't compute camera relative pose"
+    
     return camera_rels
