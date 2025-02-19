@@ -2,6 +2,8 @@ import numpy as np
 from einops import rearrange
 from ..util.math import averageSE3
 
+import pyceres
+
 class poseSolver():
     def __init__(self, type = "meansolver"):
         assert type in ["meansolver","reproject"], "solver type should be 'meansolver' or 'reproject' "
@@ -27,6 +29,9 @@ class poseSolver():
 
         return np.array(res)
 
+    def reproject_solve(self, transformation:np.ndarray):
+        
+        pass
 
     def solve(self, transformation):
         if self.type == "meansolver":
